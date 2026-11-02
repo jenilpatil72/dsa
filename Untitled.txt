@@ -1,0 +1,93 @@
+
+#include <iostream>
+using namespace std;
+
+// Selection Sort
+void selectionSort(float a[], int n)
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        int minIndex = i;
+
+        for (int j = i + 1; j < n; j++)
+        {
+            if (a[j] < a[minIndex])
+                minIndex = j;
+        }
+
+        float temp = a[i];
+        a[i] = a[minIndex];
+        a[minIndex] = temp;
+    }
+}
+
+// Bubble Sort
+void bubbleSort(float a[], int n)
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = 0; j < n - i - 1; j++)
+        {
+            if (a[j] > a[j + 1])
+            {
+                float temp = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = temp;
+            }
+        }
+    }
+}
+
+// Display Array
+void display(float a[], int n)
+{
+    for (int i = 0; i < n; i++)
+        cout << a[i] << " ";
+    cout << endl;
+}
+
+// Display Top Five Scores
+void topFive(float a[], int n)
+{
+    cout << "\nTop Five Scores:\n";
+
+    for (int i = n - 1; i >= 0 && i >= n - 5; i--)
+        cout << a[i] << endl;
+}
+
+int main()
+{
+    int n;
+    float a[100], b[100];
+
+    cout << "Enter number of students: ";
+    cin >> n;
+
+    if (n <= 0 || n > 100)
+    {
+        cout << "Invalid number of students!";
+        return 0;
+    }
+
+    cout << "Enter student percentages:\n";
+
+    for (int i = 0; i < n; i++)
+    {
+        cin >> a[i];
+        b[i] = a[i];
+    }
+
+    selectionSort(a, n);
+
+    cout << "\nSelection Sort (Ascending):\n";
+    display(a, n);
+
+    bubbleSort(b, n);
+
+    cout << "\nBubble Sort (Ascending):\n";
+    display(b, n);
+
+    topFive(a, n);
+
+    return 0;
+}

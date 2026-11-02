@@ -1,0 +1,190 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+const int SIZE = 11;
+
+struct Client
+{
+    string name;
+    string phone;
+    bool occupied = false;
+}
+int hash1(int key)
+{
+    return key % SIZE;
+}
+
+int hash2(int key)
+{
+    return 7 - (key % 7);
+}
+void linearInsert(Client table[], int key,
+                  string name, string phone)
+{
+    int index = hash1(key);
+
+    for (int i = 0; i < SIZE; i++)
+    {
+        int pos = (index + i) % SIZE;
+
+        if (!table[pos].occupied)
+        {
+            table[pos].name = name;
+            table[pos].phone = phone;
+            table[pos].occupied = true;
+            return;
+        }
+    }
+
+    cout << "Hash table is full!\n";
+}
+void quadraticInsert(Client table[], int key,
+                     string name, string phone)
+{
+    int index = hash1(key);
+
+    for (int i = 0; i < SIZE; i++)
+    {
+        int pos = (index + i * i) % SIZE;
+
+        if (!table[pos].occupied)
+        {
+            table[pos].name = name;
+            table[pos].phone = phone;
+            table[pos].occupied = true;
+            return;
+        }
+    }
+
+    cout << "No available position!\n";
+}
+void doubleInsert(Client table[], int key,
+                  string name, string phone)
+{
+    int index = hash1(key);
+    int step = hash2(key);
+
+    for (int i = 0; i < SIZE; i++)
+    {
+        int pos = (index + i * step) % SIZE;
+
+        if (!table[pos].occupied)
+        {
+            table[pos].name = name;
+            table[pos].phone = phone;
+            table[pos].occupied = true;
+            return;
+        }
+    }
+
+    cout << "Hash table is full!\n";
+}
+void searchClient(Client table[], int key)
+{
+    int index = hash1(key);
+
+    for (int i = 0; i < SIZE; i++)
+    {
+        int pos = (index + i) % SIZE;
+
+        if (!table[pos].occupied)
+            break;
+
+        if (table[pos].name != "")
+        {
+            cout << "Client: " << table[pos].name
+                 << "\nPhone: " << table[pos].phone
+                 << endl;
+            return;
+        }
+    }
+
+    cout << "Client not found!\n";
+}
+void display(Client table[])
+{
+    cout << "\nIndex\tName\tPhone\n";
+
+    for (int i = 0; i < SIZE; i++)
+    {
+        cout << i << "\t";
+
+        if (table[i].occupied)
+            cout << table[i].name << "\t"
+                 << table[i].phone;
+        else
+            cout << "Empty";
+
+        cout << endl;
+    }
+}
+
+int main()
+{
+    Client linear[SIZE], quadratic[SIZE], doubleHash[SIZE];
+
+    int choice, n, key;
+    string name, phone;
+
+    do
+    {
+        cout << "\n1. Insert Client";
+        cout << "\n2. Display Linear Probing";
+        cout << "\n3. Display Quadratic Probing";
+        cout << "\n4. Display Double Hashing";
+        cout << "\n5. Search Client";
+        cout << "\n6. Exit";
+
+        cout << "\nEnter choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            cout << "Enter client ID: ";
+            cin >> key;
+
+            cout << "Enter client name: ";
+            cin >> name;
+
+            cout << "Enter telephone number: ";
+            cin >> phone;
+
+            linearInsert(linear, key, name, phone);
+            quadraticInsert(quadratic, key, name, phone);
+            doubleInsert(doubleHash, key, name, phone);
+
+            break;
+
+        case 2:
+            display(linear);
+            break;
+
+        case 3:
+            display(quadratic);
+            break;
+
+        case 4:
+            display(doubleHash);
+            break;
+
+        case 5:
+            cout << "Enter client ID to search: ";
+            cin >> key;
+
+            searchClient(linear, key);
+            break;
+
+        case 6:
+            cout << "Exiting program...";
+            break;
+
+        default:
+            cout << "Invalid choice!";
+        }
+
+    } while (choice != 6);
+
+    return 0;
+}
